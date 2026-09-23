@@ -1,6 +1,6 @@
-# Hack4Impact Tech Lead & Software Dev Bootcamp 2026
+# Hack4Impact Team 6 Bootcamp 2026
 
-Design a shopping website to understand basic software development team dynamics.
+Design a business website to understand basic software development team dynamics.
 
 ## Table of Contents
 
