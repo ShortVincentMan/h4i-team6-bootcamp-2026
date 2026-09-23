@@ -1,6 +1,6 @@
-# name of non-profit
+# Hack4Impact Tech Lead & Software Dev Bootcamp 2026
 
-{One sentence description of the project}
+Design a shopping website to understand basic software development team dynamics.
 
 ## Table of Contents
 
@@ -13,6 +13,7 @@
 
 ### Purpose
 
+
 {Short paragraph description of the non-profit mission and the purpose of this project. Who will this project help, why is it necessary. Impact of the project.}
 
 ### Team
@@ -21,8 +22,11 @@ The {non-profit name} team consists of {#} Cal Poly students. Over the course of
 
 - [First Last](https://www.linkedin.com/) - Project Manager
 - [First Last](https://www.linkedin.com/) - Designer
+- [Vincent Le](https://www.linkedin.com/) - Tech Lead
 - [First Last](https://www.linkedin.com/) - Tech Lead
-- [First Last](https://www.linkedin.com/) - Tech Lead
+- [First Last](https://www.linkedin.com/) - Software Developer
+- [First Last](https://www.linkedin.com/) - Software Developer
+- [First Last](https://www.linkedin.com/) - Software Developer
 - [First Last](https://www.linkedin.com/) - Software Developer
 
 ## Getting Started And Contributing
