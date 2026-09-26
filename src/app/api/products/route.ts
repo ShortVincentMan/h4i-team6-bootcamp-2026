@@ -1,1 +1,6 @@
-// Product API route scaffold. The GET handler will be added in the next step.
+import { mockProducts } from "@/data/products";
+import { NextResponse } from "next/server";
+
+export function GET() {
+  return NextResponse.json(mockProducts);
+}
