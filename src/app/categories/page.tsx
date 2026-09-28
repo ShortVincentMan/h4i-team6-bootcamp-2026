@@ -1,7 +1,7 @@
 import { mockProducts } from "@/data/products";
 
 export default function CategoriesPage() {
-  const categories = [...new Set(mockProducts.map((product) => product.category))];
+  const categories = Array.from(new Set(mockProducts.map((product) => product.category)));
 
   if (categories.length === 0) {
     return (
