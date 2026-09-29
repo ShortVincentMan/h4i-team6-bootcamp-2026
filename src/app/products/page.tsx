@@ -1,9 +1,10 @@
 "use client";
 
 import ProductCard from "@/components/ProductCard";
-import { mockProducts } from "@/data/products";
+import useProducts from "@/hooks/useProducts";
+import type { Product } from "@/types/product";
 import { useEffect, useMemo, useRef, useState } from "react";
-import "./productPage.css";
+require("./productPage.css");
 
 type ShapeSpec = {
   id: number;
@@ -43,9 +44,9 @@ function createClipPath(seed: number) {
   return `polygon(${points.join(", ")})`;
 }
 
-function createShapeSet(width: number) {
+function createShapeSet(width: number, products: Product[]) {
   const count = getShapeCount(width);
-  const sourceProducts = mockProducts.length > 0 ? [...mockProducts] : [];
+  const sourceProducts = [...products];
 
   if (sourceProducts.length === 0) {
     return [];
@@ -84,6 +85,7 @@ function createShapeSet(width: number) {
 }
 
 export default function ProductPage() {
+  const { products, isLoading, error } = useProducts();
   const [viewportWidth, setViewportWidth] = useState<number>(0);
   const [shapes, setShapes] = useState<ShapeSpec[]>([]);
   const [leavingShapes, setLeavingShapes] = useState<ShapeSpec[]>([]);
@@ -134,9 +136,9 @@ export default function ProductPage() {
       return;
     }
 
-    const initialWave = createShapeSet(stableWidth);
+    const initialWave = createShapeSet(stableWidth, products);
     setShapes(initialWave);
-  }, [shapesUnlocked, stableWidth]);
+  }, [products, shapesUnlocked, stableWidth]);
 
   useEffect(() => {
     if (!shapesUnlocked) {
@@ -148,7 +150,7 @@ export default function ProductPage() {
 
     const intervalId = window.setInterval(() => {
       const currentWave = currentShapesRef.current;
-      const nextShapes = createShapeSet(stableWidth);
+      const nextShapes = createShapeSet(stableWidth, products);
 
       setLeavingShapes(currentWave);
       setIncomingShapes(nextShapes);
@@ -171,7 +173,7 @@ export default function ProductPage() {
         window.clearTimeout(leaveTimeoutRef.current);
       }
     };
-  }, [shapesUnlocked, stableWidth]);
+  }, [products, shapesUnlocked, stableWidth]);
 
   const visibleShapes = shapesUnlocked ? (incomingShapes.length > 0 ? incomingShapes : shapes) : [];
 
@@ -225,9 +227,10 @@ export default function ProductPage() {
         </header>
 
         <section className="products-page-grid">
-          {mockProducts.map((product) => (
-            <ProductCard key={product.id} {...product} />
-          ))}
+          {isLoading && <p>Loading products...</p>}
+          {error && <p role="alert">{error}</p>}
+          {!isLoading && !error && products.length === 0 && <p>No products available.</p>}
+          {!isLoading && !error && products.map((product) => <ProductCard key={product.id} {...product} />)}
         </section>
       </div>
     </main>

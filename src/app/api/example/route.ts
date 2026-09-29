@@ -1,4 +1,3 @@
-import connectDB from "@/database/db";
 import { NextResponse } from "next/server";
 
 /**
@@ -6,6 +5,5 @@ import { NextResponse } from "next/server";
  * @returns {message: string}
  */
 export async function GET() {
-  await connectDB();
   return NextResponse.json({ message: "Hello from the API!" });
 }
