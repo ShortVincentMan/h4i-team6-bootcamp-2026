@@ -1,9 +1,9 @@
 "use client";
 
 import ProductCard from "@/components/ProductCard";
-import { mockProducts } from "@/data/products";
+import type { Product } from "@/types/product";
 import { useEffect, useMemo, useRef, useState } from "react";
-import "./productPage.css";
+require("./productPage.css");
 
 type ShapeSpec = {
   id: number;
@@ -45,7 +45,7 @@ function createClipPath(seed: number) {
 
 function createShapeSet(width: number) {
   const count = getShapeCount(width);
-  const sourceProducts = mockProducts.length > 0 ? [...mockProducts] : [];
+  const sourceProducts = Product.length > 0 ? [...Product] : [];
 
   if (sourceProducts.length === 0) {
     return [];
@@ -225,7 +225,7 @@ export default function ProductPage() {
         </header>
 
         <section className="products-page-grid">
-          {mockProducts.map((product) => (
+          {Product.map((product) => (
             <ProductCard key={product.id} {...product} />
           ))}
         </section>
