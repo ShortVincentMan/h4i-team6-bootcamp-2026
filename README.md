@@ -1,4 +1,4 @@
-# Hack4Impact Team 6 Bootcamp 2026
+# Beachside Thrift {Hack4Impact Team 6 Bootcamp 2026}
 
 Design a business website to understand basic software development team dynamics.
 
@@ -13,21 +13,17 @@ Design a business website to understand basic software development team dynamics
 
 ### Purpose
 
-
 {Short paragraph description of the non-profit mission and the purpose of this project. Who will this project help, why is it necessary. Impact of the project.}
 
 ### Team
 
-The {non-profit name} team consists of {#} Cal Poly students. Over the course of about 9 months, we worked as a team to deploy this web application. The team members are listed below:
+Team 6 consists of 6 Cal Poly students. Over the course of about 4 weeks, we worked as a team to deploy this web application. The team members are listed below:
 
-- [First Last](https://www.linkedin.com/) - Project Manager
-- [First Last](https://www.linkedin.com/) - Designer
-- [Vincent Le](https://www.linkedin.com/) - Tech Lead
-- [First Last](https://www.linkedin.com/) - Tech Lead
-- [First Last](https://www.linkedin.com/) - Software Developer
-- [First Last](https://www.linkedin.com/) - Software Developer
-- [First Last](https://www.linkedin.com/) - Software Developer
-- [First Last](https://www.linkedin.com/) - Software Developer
+- [Vincent Le](https://www.linkedin.com/vincentrle) - Tech Lead
+- [Aanya Chauhan](https://www.linkedin.com/) - Software Developer
+- [Dane Stilinovich](https://www.linkedin.com/) - Software Developer
+- [Isaac Hey](https://www.linkedin.com/) - Software Developer
+- [Joanna Li](https://www.linkedin.com/) - Software Developer
 
 ## Getting Started And Contributing
 
