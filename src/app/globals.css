@@ -1,0 +1,224 @@
+/* --- Modern Navbar Styles --- */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2.5rem;
+  background-color: #8cc0eb;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* Soft drop shadow */
+}
+
+/* Styles the Title text */
+.navbar > div {
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: #1f2937; /* Dark text for contrast */
+  letter-spacing: 0.5px;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  color: #1f2937;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.5rem 1.2rem;
+  border-radius: 99px; /* pill shape */
+  transition: all 0.3s ease; /* Smooth animations */
+}
+
+.nav-links a:hover {
+  background-color: #fff9d2;
+  transform: translateY(-2px); /* lift effect on hover */
+}
+
+/* Mobile Layout adjustments */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.2rem;
+  }
+  .nav-links {
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+    gap: 0.5rem;
+  }
+  .nav-links a {
+    display: block;
+  }
+}
+
+/* Page Background & Base text */
+body {
+  background-color: #fff9d2; /* Light beach sand yellow */
+  color: #1f2937;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Common Page Container */
+.page-container {
+  min-height: 100vh;
+  padding: 2rem 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Typography */
+.page-title {
+  color: #8cc0eb; /* Sky Blue */
+  font-size: 2.5rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.page-subtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+/* Content Cards */
+.content-card {
+  background-color: #bfddf0; /* Light Blue */
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 3px solid #8cc0eb;
+}
+
+.content-card.alt {
+  background-color: #ffebcc; /* Peach/Sand accent */
+  border-color: #ffebcc;
+}
+
+.content-card p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .page-container {
+    padding: 1.5rem 1rem;
+  }
+  .page-title {
+    font-size: 2rem;
+  }
+}
+
+/* --- Carousel Styles --- */
+.carousel-container {
+  width: 100%;
+  height: 350px;
+  overflow: hidden;
+  border-radius: 12px;
+  position: relative;
+  border: 4px solid #8cc0eb; /* Sky Blue border */
+  background-color: #bfddf0;
+  margin-top: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.carousel-track {
+  display: flex;
+  height: 100%;
+  /* The transition controls the speed of the "snap" between images */
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-slide {
+  min-width: 100%; /* Forces each image to take up the full container width */
+  height: 100%;
+  position: relative;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures images fill the box without squishing */
+}
+
+.carousel-caption {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: rgba(140, 192, 235, 0.85);
+  color: #1f2937;
+  padding: 1rem;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .carousel-container {
+    height: 250px;
+  }
+}
+
+/* --- Contact Form Styles --- */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.form-input {
+  padding: 0.8rem;
+  border: 2px solid #8cc0eb;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  background-color: #ffffff;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #1f2937;
+  box-shadow: 0 0 0 3px rgba(140, 192, 235, 0.3);
+}
+
+.submit-btn {
+  background-color: #8cc0eb;
+  color: #1f2937;
+  font-weight: bold;
+  font-size: 1.1rem;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.submit-btn:hover {
+  background-color: #fff9d2;
+  transform: translateY(-2px);
+}

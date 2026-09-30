@@ -1,3 +1,18 @@
+import Link from "next/link";
+
 export default function Navbar() {
-  return <div>Navbar</div>;
+  return (
+    <nav className="navbar">
+      <div>Beachside Thrift - Team 6</div>
+      <ul className="nav-links">
+        <li>
+          <Link href="/">Home</Link>
+          <Link href="/products">Products</Link>
+          <Link href="/categories">Categories</Link>
+          <Link href="/about">About</Link>
+          <Link href="/contact">Contact</Link>
+        </li>
+      </ul>
+    </nav>
+  );
 }
