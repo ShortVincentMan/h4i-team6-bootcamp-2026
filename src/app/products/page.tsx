@@ -85,6 +85,7 @@ function createShapeSet(width: number) {
 
 export default function ProductPage() {
   const [viewportWidth, setViewportWidth] = useState<number>(0);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [shapes, setShapes] = useState<ShapeSpec[]>([]);
   const [leavingShapes, setLeavingShapes] = useState<ShapeSpec[]>([]);
   const [incomingShapes, setIncomingShapes] = useState<ShapeSpec[]>([]);
@@ -108,6 +109,11 @@ export default function ProductPage() {
       cancelAnimationFrame(frame);
       window.removeEventListener("resize", handleResize);
     };
+  }, []);
+
+  useEffect(() => {
+    const category = new URLSearchParams(window.location.search).get("category")?.trim();
+    setSelectedCategory(category || null);
   }, []);
 
   useEffect(() => {
@@ -174,6 +180,9 @@ export default function ProductPage() {
   }, [shapesUnlocked, stableWidth]);
 
   const visibleShapes = shapesUnlocked ? (incomingShapes.length > 0 ? incomingShapes : shapes) : [];
+  const displayedProducts = selectedCategory
+    ? mockProducts.filter((product) => product.category.toLocaleLowerCase() === selectedCategory.toLocaleLowerCase())
+    : mockProducts;
 
   return (
     <main className="products-page">
@@ -218,16 +227,29 @@ export default function ProductPage() {
 
           <div className="products-page-title-row">
             <div>
-              <h1 className="products-page-title">Products</h1>
-              <p className="products-page-subtitle">please buy our stuff</p>
+              <h1 className="products-page-title">{selectedCategory ? `${selectedCategory} finds` : "Products"}</h1>
+              <p className="products-page-subtitle">
+                {selectedCategory
+                  ? `A selection of ${selectedCategory.toLocaleLowerCase()} from our beachside shelves.`
+                  : "please buy our stuff"}
+              </p>
+              {selectedCategory && (
+                <a className="products-page-clear-filter" href="/products">
+                  View all products
+                </a>
+              )}
             </div>
           </div>
         </header>
 
         <section className="products-page-grid">
-          {mockProducts.map((product) => (
-            <ProductCard key={product.id} {...product} />
-          ))}
+          {displayedProducts.length > 0 ? (
+            displayedProducts.map((product) => <ProductCard key={product.id} {...product} />)
+          ) : (
+            <p className="products-page-empty">
+              No products found in this category. Try browsing all products instead.
+            </p>
+          )}
         </section>
       </div>
     </main>

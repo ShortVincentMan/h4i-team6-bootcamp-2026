@@ -105,6 +105,32 @@
   animation: fadeInUp 0.8s ease-out 0.3s both;
 }
 
+.products-page-clear-filter {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 0.85rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.74);
+  color: #1f3d5a;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.products-page-clear-filter:hover {
+  background: #fff9d2;
+  transform: translateY(-1px);
+}
+
+.products-page-clear-filter:focus-visible {
+  outline: 2px solid #1f3d5a;
+  outline-offset: 3px;
+}
+
 .products-page-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -114,6 +140,17 @@
   justify-items: center;
   align-items: stretch;
   animation: fadeInUp 0.9s ease-out 0.35s both;
+}
+
+.products-page-empty {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 2rem;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.62);
+  color: #45627d;
+  font-weight: 600;
+  text-align: center;
 }
 
 @keyframes fadeInUp {
