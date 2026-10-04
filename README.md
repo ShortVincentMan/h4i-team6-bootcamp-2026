@@ -13,7 +13,6 @@ Design a business website to understand basic software development team dynamics
 
 ### Purpose
 
-
 {Short paragraph description of the non-profit mission and the purpose of this project. Who will this project help, why is it necessary. Impact of the project.}
 
 ### Team
