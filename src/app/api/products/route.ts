@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
-import connectDB from '@/database/db';
-import Product from '@/database/productSchema';
+import { NextResponse } from "next/server";
+import connectDB from "@/database/db";
+import Product from "@/database/productSchema";
 
 export async function GET() {
   try {
@@ -8,10 +8,7 @@ export async function GET() {
     const products = await Product.find({});
     return NextResponse.json(products, { status: 200 });
   } catch (error) {
-    return NextResponse.json(
-      { error: 'Failed to fetch products' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch products" }, { status: 500 });
   }
 }
 
@@ -22,18 +19,8 @@ export async function POST(request: Request) {
 
     const { name, description, price, category, imageUrl, inStock } = body;
 
-    if (
-      !name ||
-      !description ||
-      price === undefined ||
-      !category ||
-      !imageUrl ||
-      inStock === undefined
-    ) {
-      return NextResponse.json(
-        { error: 'Missing required product fields' },
-        { status: 400 }
-      );
+    if (!name || !description || price === undefined || !category || !imageUrl || inStock === undefined) {
+      return NextResponse.json({ error: "Missing required product fields" }, { status: 400 });
     }
 
     const newProduct = await Product.create({
@@ -47,9 +34,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json(newProduct, { status: 201 });
   } catch (error) {
-    return NextResponse.json(
-      { error: 'Failed to create product' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to create product" }, { status: 500 });
   }
 }
