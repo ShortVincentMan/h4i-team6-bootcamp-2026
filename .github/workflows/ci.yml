@@ -16,7 +16,11 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
     # Use matrix strategy to test multiple Node.js versions
     strategy:
       matrix:
