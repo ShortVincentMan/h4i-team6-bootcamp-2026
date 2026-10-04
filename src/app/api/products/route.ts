@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import connectDB from "@/database/db";
 import Product from "@/database/productSchema";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
