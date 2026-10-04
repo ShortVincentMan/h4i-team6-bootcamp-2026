@@ -2,8 +2,11 @@
 
 import ProductCard from "@/components/ProductCard";
 import { mockProducts } from "@/data/products";
+import type { Product as ProductType } from "@/types/product";
 import { useEffect, useMemo, useRef, useState } from "react";
-import "./productPage.css";
+require("./productPage.css");
+
+const products: ProductType[] = mockProducts;
 
 type ShapeSpec = {
   id: number;
@@ -45,7 +48,7 @@ function createClipPath(seed: number) {
 
 function createShapeSet(width: number) {
   const count = getShapeCount(width);
-  const sourceProducts = mockProducts.length > 0 ? [...mockProducts] : [];
+  const sourceProducts = products.length > 0 ? [...products] : [];
 
   if (sourceProducts.length === 0) {
     return [];
