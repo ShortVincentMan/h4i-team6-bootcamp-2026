@@ -1,12 +1,10 @@
 "use client";
 
 import ProductCard from "@/components/ProductCard";
-import { mockProducts } from "@/data/products";
+import AddProductForm from "@/components/AddProductForm";
 import type { Product as ProductType } from "@/types/product";
 import { useEffect, useMemo, useRef, useState } from "react";
 require("./productPage.css");
-
-const products: ProductType[] = mockProducts;
 
 type ShapeSpec = {
   id: number;
@@ -46,7 +44,7 @@ function createClipPath(seed: number) {
   return `polygon(${points.join(", ")})`;
 }
 
-function createShapeSet(width: number) {
+function createShapeSet(width: number, products: ProductType[]) {
   const count = getShapeCount(width);
   const sourceProducts = products.length > 0 ? [...products] : [];
 
@@ -87,6 +85,8 @@ function createShapeSet(width: number) {
 }
 
 export default function ProductPage() {
+  const [products, setProducts] = useState<ProductType[]>([]);
+  const [productsError, setProductsError] = useState<string | null>(null);
   const [viewportWidth, setViewportWidth] = useState<number>(0);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [shapes, setShapes] = useState<ShapeSpec[]>([]);
@@ -96,6 +96,26 @@ export default function ProductPage() {
   const [shapesUnlocked, setShapesUnlocked] = useState(false);
   const leaveTimeoutRef = useRef<number | null>(null);
   const currentShapesRef = useRef<ShapeSpec[]>(shapes);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const loadProducts = async () => {
+      try {
+        const response = await fetch("/api/products", { signal: controller.signal });
+        if (!response.ok) throw new Error("Unable to load products");
+        const data = await response.json();
+        setProducts(data as ProductType[]);
+      } catch (error) {
+        if ((error as Error).name !== "AbortError") {
+          setProductsError("Products could not be loaded. Please refresh and try again.");
+        }
+      }
+    };
+
+    loadProducts();
+    return () => controller.abort();
+  }, []);
 
   useEffect(() => {
     const updateWidth = () => setViewportWidth(window.innerWidth);
@@ -143,9 +163,9 @@ export default function ProductPage() {
       return;
     }
 
-    const initialWave = createShapeSet(stableWidth);
+    const initialWave = createShapeSet(stableWidth, products);
     setShapes(initialWave);
-  }, [shapesUnlocked, stableWidth]);
+  }, [products, shapesUnlocked, stableWidth]);
 
   useEffect(() => {
     if (!shapesUnlocked) {
@@ -157,7 +177,7 @@ export default function ProductPage() {
 
     const intervalId = window.setInterval(() => {
       const currentWave = currentShapesRef.current;
-      const nextShapes = createShapeSet(stableWidth);
+      const nextShapes = createShapeSet(stableWidth, products);
 
       setLeavingShapes(currentWave);
       setIncomingShapes(nextShapes);
@@ -180,12 +200,12 @@ export default function ProductPage() {
         window.clearTimeout(leaveTimeoutRef.current);
       }
     };
-  }, [shapesUnlocked, stableWidth]);
+  }, [products, shapesUnlocked, stableWidth]);
 
   const visibleShapes = shapesUnlocked ? (incomingShapes.length > 0 ? incomingShapes : shapes) : [];
   const displayedProducts = selectedCategory
-    ? mockProducts.filter((product) => product.category.toLocaleLowerCase() === selectedCategory.toLocaleLowerCase())
-    : mockProducts;
+    ? products.filter((product) => product.category.toLocaleLowerCase() === selectedCategory.toLocaleLowerCase())
+    : products;
 
   return (
     <main className="products-page">
@@ -245,12 +265,20 @@ export default function ProductPage() {
           </div>
         </header>
 
+        <AddProductForm onProductCreated={(product) => setProducts((current) => [...current, product])} />
+
         <section className="products-page-grid">
-          {displayedProducts.length > 0 ? (
-            displayedProducts.map((product) => <ProductCard key={product.id} {...product} />)
+          {productsError ? (
+            <p className="products-page-empty">{productsError}</p>
+          ) : displayedProducts.length > 0 ? (
+            displayedProducts.map((product) => (
+              <ProductCard key={product._id ?? product.id ?? product.name} {...product} />
+            ))
           ) : (
             <p className="products-page-empty">
-              No products found in this category. Try browsing all products instead.
+              {selectedCategory
+                ? "No products found in this category. Try browsing all products instead."
+                : "No products have been added yet."}
             </p>
           )}
         </section>

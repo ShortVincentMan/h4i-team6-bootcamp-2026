@@ -1,0 +1,86 @@
+.add-product {
+  margin: 0 0 2rem;
+  padding: 1.5rem;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.72);
+  color: #1f3d5a;
+}
+.add-product h2 {
+  margin: 0 0 1rem;
+}
+.add-product form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+.add-product-field {
+  display: grid;
+  gap: 0.35rem;
+  font-weight: 700;
+}
+.add-product-field:nth-child(2),
+.add-product-field:nth-child(5) {
+  grid-column: 1 / -1;
+}
+.add-product input,
+.add-product textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #9ab4c8;
+  border-radius: 4px;
+  padding: 0.65rem;
+  font: inherit;
+}
+.add-product textarea {
+  min-height: 5rem;
+  resize: vertical;
+}
+.add-product-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+}
+.add-product-checkbox input {
+  width: auto;
+}
+.add-product-error {
+  color: #ad2131;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.add-product-feedback {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-weight: 700;
+}
+.add-product-feedback.success {
+  color: #166534;
+}
+.add-product-feedback.error {
+  color: #ad2131;
+}
+.add-product button {
+  width: fit-content;
+  border: 0;
+  border-radius: 4px;
+  padding: 0.7rem 1rem;
+  background: #1f3d5a;
+  color: white;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+.add-product button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+@media (max-width: 600px) {
+  .add-product form {
+    grid-template-columns: 1fr;
+  }
+  .add-product-field:nth-child(2),
+  .add-product-field:nth-child(5) {
+    grid-column: auto;
+  }
+}
