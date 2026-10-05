@@ -2,7 +2,7 @@ import type { Product } from "@/types/product";
 
 export const mockProducts: Product[] = [
   {
-    id: 1,
+    _id: "1",
     name: "Vintage Surfboard",
     description: "Used 7'6\" surfboard with minor dings.",
     price: 285.0,
@@ -11,7 +11,7 @@ export const mockProducts: Product[] = [
     inStock: true,
   },
   {
-    id: 2,
+    _id: "2",
     name: "Tee Shirt",
     description: "Soft, well-worn cotton tee.",
     price: 24.0,
@@ -20,7 +20,7 @@ export const mockProducts: Product[] = [
     inStock: true,
   },
   {
-    id: 3,
+    _id: "3",
     name: "Canvas Tote",
     description: "Roomy used tote for beach days.",
     price: 18.0,
@@ -29,7 +29,7 @@ export const mockProducts: Product[] = [
     inStock: true,
   },
   {
-    id: 4,
+    _id: "4",
     name: "Red Shoes",
     description: "Used red shoes in good condition.",
     price: 28.0,
@@ -38,7 +38,7 @@ export const mockProducts: Product[] = [
     inStock: true,
   },
   {
-    id: 5,
+    _id: "5",
     name: "Tortoiseshell Sunglasses",
     description: "Vintage frames with dark lenses.",
     price: 22.0,
@@ -47,7 +47,7 @@ export const mockProducts: Product[] = [
     inStock: true,
   },
   {
-    id: 6,
+    _id: "6",
     name: "Vintage Windbreaker",
     description: "Light jacket for breezy beach mornings.",
     price: 42.0,
@@ -56,7 +56,7 @@ export const mockProducts: Product[] = [
     inStock: false,
   },
   {
-    id: 7,
+    _id: "7",
     name: "Fancy Bracelet",
     description: "Handmade bracelet with a lot of shiny bits and pieces.",
     price: 16.0,
@@ -65,7 +65,7 @@ export const mockProducts: Product[] = [
     inStock: false,
   },
   {
-    id: 8,
+    _id: "8",
     name: "Beach Towel",
     description: "Soft, lightweight cotton towel. The dog is not included.",
     price: 20.0,
@@ -74,7 +74,7 @@ export const mockProducts: Product[] = [
     inStock: false,
   },
   {
-    id: 9,
+    _id: "9",
     name: "Leather Sandals",
     description: "Used leather slides with adjustable straps.",
     price: 34.0,

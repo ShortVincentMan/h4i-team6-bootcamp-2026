@@ -247,7 +247,7 @@ export default function ProductPage() {
 
         <section className="products-page-grid">
           {displayedProducts.length > 0 ? (
-            displayedProducts.map((product) => <ProductCard key={product.id} {...product} />)
+            displayedProducts.map((product) => <ProductCard key={product._id} {...product} />)
           ) : (
             <p className="products-page-empty">
               No products found in this category. Try browsing all products instead.
