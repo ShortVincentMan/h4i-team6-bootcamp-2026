@@ -1,12 +1,10 @@
 "use client";
 
 import ProductCard from "@/components/ProductCard";
-import { mockProducts } from "@/data/products";
+// import { mockProducts } from "@/data/products";
 import type { Product as ProductType } from "@/types/product";
 import { useEffect, useMemo, useRef, useState } from "react";
-require("./productPage.css");
-
-const products: ProductType[] = mockProducts;
+import "./productPage.css";
 
 type ShapeSpec = {
   id: number;
@@ -46,7 +44,7 @@ function createClipPath(seed: number) {
   return `polygon(${points.join(", ")})`;
 }
 
-function createShapeSet(width: number) {
+function createShapeSet(width: number, products: ProductType[]) {
   const count = getShapeCount(width);
   const sourceProducts = products.length > 0 ? [...products] : [];
 
@@ -87,6 +85,8 @@ function createShapeSet(width: number) {
 }
 
 export default function ProductPage() {
+  const [products, setProducts] = useState<ProductType[]>([]);
+  const [loadStatus, setLoadStatus] = useState<boolean | string>(false);
   const [viewportWidth, setViewportWidth] = useState<number>(0);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [shapes, setShapes] = useState<ShapeSpec[]>([]);
@@ -96,6 +96,25 @@ export default function ProductPage() {
   const [shapesUnlocked, setShapesUnlocked] = useState(false);
   const leaveTimeoutRef = useRef<number | null>(null);
   const currentShapesRef = useRef<ShapeSpec[]>(shapes);
+
+  useEffect(() => {
+    fetch("/api/products").then((data) => {
+      if (data) {
+        if (data.status === 200) {
+          data.json().then((json) => {
+            setProducts(json);
+            setLoadStatus(true);
+          });
+        } else {
+          console.log("Product data not loaded", data.status);
+          setLoadStatus("error");
+        }
+      } else {
+        console.log("data was undefined");
+        setLoadStatus("error");
+      }
+    });
+  }, []);
 
   useEffect(() => {
     const updateWidth = () => setViewportWidth(window.innerWidth);
@@ -143,9 +162,9 @@ export default function ProductPage() {
       return;
     }
 
-    const initialWave = createShapeSet(stableWidth);
+    const initialWave = createShapeSet(stableWidth, products);
     setShapes(initialWave);
-  }, [shapesUnlocked, stableWidth]);
+  }, [products, shapesUnlocked, stableWidth]);
 
   useEffect(() => {
     if (!shapesUnlocked) {
@@ -157,7 +176,7 @@ export default function ProductPage() {
 
     const intervalId = window.setInterval(() => {
       const currentWave = currentShapesRef.current;
-      const nextShapes = createShapeSet(stableWidth);
+      const nextShapes = createShapeSet(stableWidth, products);
 
       setLeavingShapes(currentWave);
       setIncomingShapes(nextShapes);
@@ -180,12 +199,12 @@ export default function ProductPage() {
         window.clearTimeout(leaveTimeoutRef.current);
       }
     };
-  }, [shapesUnlocked, stableWidth]);
+  }, [products, shapesUnlocked, stableWidth]);
 
   const visibleShapes = shapesUnlocked ? (incomingShapes.length > 0 ? incomingShapes : shapes) : [];
   const displayedProducts = selectedCategory
-    ? mockProducts.filter((product) => product.category.toLocaleLowerCase() === selectedCategory.toLocaleLowerCase())
-    : mockProducts;
+    ? products.filter((product) => product.category.toLocaleLowerCase() === selectedCategory.toLocaleLowerCase())
+    : products;
 
   return (
     <main className="products-page">
@@ -226,7 +245,13 @@ export default function ProductPage() {
             ))}
           </div>
 
-          <div className="products-page-eyebrow">consume consume consume</div>
+          <div className="products-page-eyebrow">
+            {loadStatus === "error"
+              ? "LOADING FAILED"
+              : loadStatus === false
+                ? "Loading products..."
+                : "consume consume consume"}
+          </div>
 
           <div className="products-page-title-row">
             <div>
@@ -245,12 +270,16 @@ export default function ProductPage() {
           </div>
         </header>
 
-        <section className="products-page-grid">
+        <section className={`products-page-grid ${loadStatus === true ? "products-page-grid--loaded" : ""}`}>
           {displayedProducts.length > 0 ? (
             displayedProducts.map((product) => <ProductCard key={product.id} {...product} />)
           ) : (
             <p className="products-page-empty">
-              No products found in this category. Try browsing all products instead.
+              {loadStatus === "error"
+                ? "Failed to load products..."
+                : loadStatus === false
+                  ? "Loading products..."
+                  : "No products found in this category. Try browsing all products instead."}
             </p>
           )}
         </section>
