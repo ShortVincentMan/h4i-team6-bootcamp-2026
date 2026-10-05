@@ -2,6 +2,7 @@
 
 import ProductCard from "@/components/ProductCard";
 import AddProductForm from "@/components/AddProductForm";
+import { mockProducts } from "@/data/products";
 import type { Product as ProductType } from "@/types/product";
 import { useEffect, useMemo, useRef, useState } from "react";
 require("./productPage.css");
@@ -84,8 +85,18 @@ function createShapeSet(width: number, products: ProductType[]) {
   });
 }
 
+function mergeProducts(existingProducts: ProductType[], incomingProducts: ProductType[]) {
+  const existingProductKeys = new Set(existingProducts.map(productKey));
+
+  return [...existingProducts, ...incomingProducts.filter((product) => !existingProductKeys.has(productKey(product)))];
+}
+
+function productKey(product: ProductType) {
+  return product._id ?? product.id ?? `${product.name}-${product.category}-${product.imageUrl}`;
+}
+
 export default function ProductPage() {
-  const [products, setProducts] = useState<ProductType[]>([]);
+  const [products, setProducts] = useState<ProductType[]>(mockProducts);
   const [productsError, setProductsError] = useState<string | null>(null);
   const [viewportWidth, setViewportWidth] = useState<number>(0);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -105,7 +116,7 @@ export default function ProductPage() {
         const response = await fetch("/api/products", { signal: controller.signal });
         if (!response.ok) throw new Error("Unable to load products");
         const data = await response.json();
-        setProducts(data as ProductType[]);
+        setProducts((currentProducts) => mergeProducts(currentProducts, data as ProductType[]));
       } catch (error) {
         if ((error as Error).name !== "AbortError") {
           setProductsError("Products could not be loaded. Please refresh and try again.");
@@ -265,7 +276,9 @@ export default function ProductPage() {
           </div>
         </header>
 
-        <AddProductForm onProductCreated={(product) => setProducts((current) => [...current, product])} />
+        <AddProductForm
+          onProductCreated={(product) => setProducts((currentProducts) => mergeProducts(currentProducts, [product]))}
+        />
 
         <section className="products-page-grid">
           {productsError ? (
