@@ -3,6 +3,7 @@
 import ProductCard from "@/components/ProductCard";
 import AddProductForm from "@/components/AddProductForm";
 import { mockProducts } from "@/data/products";
+import { mergeProducts } from "@/lib/products";
 import type { Product as ProductType } from "@/types/product";
 import { useEffect, useMemo, useRef, useState } from "react";
 require("./productPage.css");
@@ -83,16 +84,6 @@ function createShapeSet(width: number, products: ProductType[]) {
       clipPath: createClipPath(index + Math.round(Math.random() * 100)),
     } satisfies ShapeSpec;
   });
-}
-
-function mergeProducts(existingProducts: ProductType[], incomingProducts: ProductType[]) {
-  const existingProductKeys = new Set(existingProducts.map(productKey));
-
-  return [...existingProducts, ...incomingProducts.filter((product) => !existingProductKeys.has(productKey(product)))];
-}
-
-function productKey(product: ProductType) {
-  return product._id ?? product.id ?? `${product.name}-${product.category}-${product.imageUrl}`;
 }
 
 export default function ProductPage() {
