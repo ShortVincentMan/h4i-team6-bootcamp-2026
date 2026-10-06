@@ -139,6 +139,9 @@
   justify-content: center;
   justify-items: center;
   align-items: stretch;
+}
+
+.products-page-grid--loaded {
   animation: fadeInUp 0.9s ease-out 0.35s both;
 }
 
