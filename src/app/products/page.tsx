@@ -248,13 +248,7 @@ export default function ProductPage() {
             ))}
           </div>
 
-          <div className="products-page-eyebrow">
-            {loadStatus === "error"
-              ? "LOADING FAILED"
-              : loadStatus === false
-                ? "Loading products..."
-                : "consume consume consume"}
-          </div>
+          <div className="products-page-eyebrow">{productsError ? "LOADING FAILED" : "consume consume consume"}</div>
 
           <div className="products-page-title-row">
             <div>
