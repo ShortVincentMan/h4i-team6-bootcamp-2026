@@ -19,16 +19,6 @@
   background: #2e5a7e;
 }
 
-.add-product-backdrop {
-  position: fixed;
-  z-index: 20;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 1rem;
-  background: rgba(20, 42, 59, 0.45);
-}
-
 .add-product {
   width: min(100%, 42rem);
   max-height: calc(100vh - 2rem);
@@ -38,6 +28,14 @@
   background: #fffdf4;
   color: #1f3d5a;
   box-shadow: 0 18px 48px rgba(20, 42, 59, 0.3);
+}
+
+.add-product-dropdown {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 5rem;
+  z-index: 20;
+  animation: add-product-popover-in 0.18s ease-out both;
 }
 
 .add-product-header {
@@ -146,11 +144,28 @@
     right: 1rem;
     bottom: 1rem;
   }
+
+  .add-product-dropdown {
+    right: 1rem;
+    bottom: 4.75rem;
+  }
   .add-product form {
     grid-template-columns: 1fr;
   }
   .add-product-field:nth-child(2),
   .add-product-field:nth-child(5) {
     grid-column: auto;
+  }
+}
+
+@keyframes add-product-popover-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }

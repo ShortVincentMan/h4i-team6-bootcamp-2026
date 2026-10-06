@@ -117,95 +117,88 @@ export default function AddProductForm({ onProductCreated }: AddProductFormProps
       </button>
 
       {isOpen && (
-        <div
-          className="add-product-backdrop"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget && !isSubmitting) setIsOpen(false);
-          }}
-        >
-          <section className="add-product" role="dialog" aria-modal="true" aria-labelledby="add-product-title">
-            <header className="add-product-header">
-              <h2 id="add-product-title">Add a product</h2>
-              <button
-                className="add-product-close"
-                type="button"
-                onClick={() => setIsOpen(false)}
-                disabled={isSubmitting}
-                aria-label="Close add product form"
-              >
-                ×
-              </button>
-            </header>
-            <form noValidate onSubmit={handleSubmit}>
-              <FormField label="Name" error={errors.name}>
-                <input
-                  id="product-name"
-                  autoFocus
-                  value={values.name}
-                  onChange={(event) => updateField("name", event.target.value)}
-                  aria-invalid={Boolean(errors.name)}
-                  aria-describedby={errors.name ? "product-name-error" : undefined}
-                />
-              </FormField>
-              <FormField label="Description" error={errors.description}>
-                <textarea
-                  id="product-description"
-                  value={values.description}
-                  onChange={(event) => updateField("description", event.target.value)}
-                  aria-invalid={Boolean(errors.description)}
-                  aria-describedby={errors.description ? "product-description-error" : undefined}
-                />
-              </FormField>
-              <FormField label="Price" error={errors.price}>
-                <input
-                  id="product-price"
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  value={values.price}
-                  onChange={(event) => updateField("price", event.target.value)}
-                  aria-invalid={Boolean(errors.price)}
-                  aria-describedby={errors.price ? "product-price-error" : undefined}
-                />
-              </FormField>
-              <FormField label="Category" error={errors.category}>
-                <input
-                  id="product-category"
-                  value={values.category}
-                  onChange={(event) => updateField("category", event.target.value)}
-                  aria-invalid={Boolean(errors.category)}
-                  aria-describedby={errors.category ? "product-category-error" : undefined}
-                />
-              </FormField>
-              <FormField label="Image URL" error={errors.imageUrl}>
-                <input
-                  id="product-image-url"
-                  type="url"
-                  value={values.imageUrl}
-                  onChange={(event) => updateField("imageUrl", event.target.value)}
-                  aria-invalid={Boolean(errors.imageUrl)}
-                  aria-describedby={errors.imageUrl ? "product-image-url-error" : undefined}
-                />
-              </FormField>
-              <label className="add-product-checkbox">
-                <input
-                  type="checkbox"
-                  checked={values.inStock}
-                  onChange={(event) => updateField("inStock", event.target.checked)}
-                />{" "}
-                In stock
-              </label>
-              {feedback && (
-                <p className={`add-product-feedback ${feedback.type}`} role="status">
-                  {feedback.message}
-                </p>
-              )}
-              <button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Adding product…" : "Add product"}
-              </button>
-            </form>
-          </section>
-        </div>
+        <section className="add-product add-product-dropdown" role="dialog" aria-labelledby="add-product-title">
+          <header className="add-product-header">
+            <h2 id="add-product-title">Add a product</h2>
+            <button
+              className="add-product-close"
+              type="button"
+              onClick={() => setIsOpen(false)}
+              disabled={isSubmitting}
+              aria-label="Close add product form"
+            >
+              ×
+            </button>
+          </header>
+          <form noValidate onSubmit={handleSubmit}>
+            <FormField label="Name" error={errors.name}>
+              <input
+                id="product-name"
+                autoFocus
+                value={values.name}
+                onChange={(event) => updateField("name", event.target.value)}
+                aria-invalid={Boolean(errors.name)}
+                aria-describedby={errors.name ? "product-name-error" : undefined}
+              />
+            </FormField>
+            <FormField label="Description" error={errors.description}>
+              <textarea
+                id="product-description"
+                value={values.description}
+                onChange={(event) => updateField("description", event.target.value)}
+                aria-invalid={Boolean(errors.description)}
+                aria-describedby={errors.description ? "product-description-error" : undefined}
+              />
+            </FormField>
+            <FormField label="Price" error={errors.price}>
+              <input
+                id="product-price"
+                type="number"
+                min="0"
+                step="0.01"
+                value={values.price}
+                onChange={(event) => updateField("price", event.target.value)}
+                aria-invalid={Boolean(errors.price)}
+                aria-describedby={errors.price ? "product-price-error" : undefined}
+              />
+            </FormField>
+            <FormField label="Category" error={errors.category}>
+              <input
+                id="product-category"
+                value={values.category}
+                onChange={(event) => updateField("category", event.target.value)}
+                aria-invalid={Boolean(errors.category)}
+                aria-describedby={errors.category ? "product-category-error" : undefined}
+              />
+            </FormField>
+            <FormField label="Image URL" error={errors.imageUrl}>
+              <input
+                id="product-image-url"
+                type="url"
+                value={values.imageUrl}
+                onChange={(event) => updateField("imageUrl", event.target.value)}
+                aria-invalid={Boolean(errors.imageUrl)}
+                aria-describedby={errors.imageUrl ? "product-image-url-error" : undefined}
+              />
+            </FormField>
+            <label className="add-product-checkbox">
+              <input
+                type="checkbox"
+                checked={values.inStock}
+                onChange={(event) => updateField("inStock", event.target.checked)}
+              />{" "}
+              In stock
+            </label>
+            {feedback && (
+              <p className={`add-product-feedback ${feedback.type}`} role="status">
+                {feedback.message}
+              </p>
+            )}
+            <button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Adding product…" : "Add product"}
+            </button>
+          </form>
+        </section>
       )}
     </>
   );
