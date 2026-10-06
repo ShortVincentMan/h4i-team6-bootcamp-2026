@@ -19,6 +19,8 @@ type ShapeSpec = {
   clipPath: string;
 };
 
+type LoadStatus = "loading" | "ready" | "error";
+
 function getShapeCount(width: number) {
   if (width >= 1440) return 11;
   if (width >= 1100) return 9;
@@ -89,6 +91,7 @@ function createShapeSet(width: number, products: ProductType[]) {
 export default function ProductPage() {
   const [products, setProducts] = useState<ProductType[]>(mockProducts);
   const [productsError, setProductsError] = useState<string | null>(null);
+  const [loadStatus, setLoadStatus] = useState<LoadStatus>("loading");
   const [viewportWidth, setViewportWidth] = useState<number>(0);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [shapes, setShapes] = useState<ShapeSpec[]>([]);
@@ -108,9 +111,11 @@ export default function ProductPage() {
         if (!response.ok) throw new Error("Unable to load products");
         const data = await response.json();
         setProducts((currentProducts) => mergeProducts(currentProducts, data as ProductType[]));
+        setLoadStatus("ready");
       } catch (error) {
         if ((error as Error).name !== "AbortError") {
           setProductsError("Products could not be loaded. Please refresh and try again.");
+          setLoadStatus("error");
         }
       }
     };
@@ -248,7 +253,13 @@ export default function ProductPage() {
             ))}
           </div>
 
-          <div className="products-page-eyebrow">{productsError ? "LOADING FAILED" : "consume consume consume"}</div>
+          <div className="products-page-eyebrow">
+            {loadStatus === "error"
+              ? "LOADING FAILED"
+              : loadStatus === "loading"
+                ? "Loading products..."
+                : "consume consume consume"}
+          </div>
 
           <div className="products-page-title-row">
             <div>
