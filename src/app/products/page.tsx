@@ -2,8 +2,6 @@
 
 import ProductCard from "@/components/ProductCard";
 import AddProductForm from "@/components/AddProductForm";
-import { mockProducts } from "@/data/products";
-import { mergeProducts } from "@/lib/products";
 import type { Product as ProductType } from "@/types/product";
 import { useEffect, useMemo, useRef, useState } from "react";
 require("./productPage.css");
@@ -89,7 +87,7 @@ function createShapeSet(width: number, products: ProductType[]) {
 }
 
 export default function ProductPage() {
-  const [products, setProducts] = useState<ProductType[]>(mockProducts);
+  const [products, setProducts] = useState<ProductType[]>([]);
   const [productsError, setProductsError] = useState<string | null>(null);
   const [loadStatus, setLoadStatus] = useState<LoadStatus>("loading");
   const [viewportWidth, setViewportWidth] = useState<number>(0);
@@ -110,7 +108,7 @@ export default function ProductPage() {
         const response = await fetch("/api/products", { signal: controller.signal });
         if (!response.ok) throw new Error("Unable to load products");
         const data = await response.json();
-        setProducts((currentProducts) => mergeProducts(currentProducts, data as ProductType[]));
+        setProducts(data as ProductType[]);
         setLoadStatus("ready");
       } catch (error) {
         if ((error as Error).name !== "AbortError") {
@@ -279,7 +277,7 @@ export default function ProductPage() {
         </header>
 
         <AddProductForm
-          onProductCreated={(product) => setProducts((currentProducts) => mergeProducts(currentProducts, [product]))}
+          onProductCreated={(product) => setProducts((currentProducts) => [...currentProducts, product])}
         />
 
         <section className="products-page-grid">

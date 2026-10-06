@@ -2,14 +2,12 @@
 
 import CategoryCard from "@/components/CategoryCard";
 import "@/components/categoryCard.css";
-import { mockProducts } from "@/data/products";
-import { mergeProducts } from "@/lib/products";
 import type { Product } from "@/types/product";
 import { useEffect, useMemo, useState } from "react";
 import "./categoriesPage.css";
 
 export default function CategoriesPage() {
-  const [products, setProducts] = useState<Product[]>(mockProducts);
+  const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -19,7 +17,7 @@ export default function CategoriesPage() {
         const response = await fetch("/api/products", { signal: controller.signal });
         if (!response.ok) return;
         const apiProducts = (await response.json()) as Product[];
-        setProducts((currentProducts) => mergeProducts(currentProducts, apiProducts));
+        setProducts(apiProducts);
       } catch (error) {
         if ((error as Error).name !== "AbortError") {
           console.error("Unable to load products for categories", error);
