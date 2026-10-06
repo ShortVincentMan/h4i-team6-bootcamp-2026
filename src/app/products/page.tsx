@@ -272,7 +272,7 @@ export default function ProductPage() {
 
         <section className={`products-page-grid ${loadStatus === true ? "products-page-grid--loaded" : ""}`}>
           {displayedProducts.length > 0 ? (
-            displayedProducts.map((product) => <ProductCard key={product.id} {...product} />)
+            displayedProducts.map((product) => <ProductCard key={product._id} {...product} />)
           ) : (
             <p className="products-page-empty">
               {loadStatus === "error"
