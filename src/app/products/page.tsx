@@ -1,10 +1,12 @@
 "use client";
 
 import ProductCard from "@/components/ProductCard";
-// import { mockProducts } from "@/data/products";
+import AddProductForm from "@/components/AddProductForm";
+import { mockProducts } from "@/data/products";
+import { mergeProducts } from "@/lib/products";
 import type { Product as ProductType } from "@/types/product";
 import { useEffect, useMemo, useRef, useState } from "react";
-import "./productPage.css";
+require("./productPage.css");
 
 type ShapeSpec = {
   id: number;
@@ -16,6 +18,8 @@ type ShapeSpec = {
   imageUrl: string;
   clipPath: string;
 };
+
+type LoadStatus = "loading" | "ready" | "error";
 
 function getShapeCount(width: number) {
   if (width >= 1440) return 11;
@@ -85,8 +89,9 @@ function createShapeSet(width: number, products: ProductType[]) {
 }
 
 export default function ProductPage() {
-  const [products, setProducts] = useState<ProductType[]>([]);
-  const [loadStatus, setLoadStatus] = useState<boolean | string>(false);
+  const [products, setProducts] = useState<ProductType[]>(mockProducts);
+  const [productsError, setProductsError] = useState<string | null>(null);
+  const [loadStatus, setLoadStatus] = useState<LoadStatus>("loading");
   const [viewportWidth, setViewportWidth] = useState<number>(0);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [shapes, setShapes] = useState<ShapeSpec[]>([]);
@@ -98,22 +103,25 @@ export default function ProductPage() {
   const currentShapesRef = useRef<ShapeSpec[]>(shapes);
 
   useEffect(() => {
-    fetch("/api/products").then((data) => {
-      if (data) {
-        if (data.status === 200) {
-          data.json().then((json) => {
-            setProducts(json);
-            setLoadStatus(true);
-          });
-        } else {
-          console.log("Product data not loaded", data.status);
+    const controller = new AbortController();
+
+    const loadProducts = async () => {
+      try {
+        const response = await fetch("/api/products", { signal: controller.signal });
+        if (!response.ok) throw new Error("Unable to load products");
+        const data = await response.json();
+        setProducts((currentProducts) => mergeProducts(currentProducts, data as ProductType[]));
+        setLoadStatus("ready");
+      } catch (error) {
+        if ((error as Error).name !== "AbortError") {
+          setProductsError("Products could not be loaded. Please refresh and try again.");
           setLoadStatus("error");
         }
-      } else {
-        console.log("data was undefined");
-        setLoadStatus("error");
       }
-    });
+    };
+
+    loadProducts();
+    return () => controller.abort();
   }, []);
 
   useEffect(() => {
@@ -248,7 +256,7 @@ export default function ProductPage() {
           <div className="products-page-eyebrow">
             {loadStatus === "error"
               ? "LOADING FAILED"
-              : loadStatus === false
+              : loadStatus === "loading"
                 ? "Loading products..."
                 : "consume consume consume"}
           </div>
@@ -270,16 +278,22 @@ export default function ProductPage() {
           </div>
         </header>
 
-        <section className={`products-page-grid ${loadStatus === true ? "products-page-grid--loaded" : ""}`}>
-          {displayedProducts.length > 0 ? (
-            displayedProducts.map((product) => <ProductCard key={product._id} {...product} />)
+        <AddProductForm
+          onProductCreated={(product) => setProducts((currentProducts) => mergeProducts(currentProducts, [product]))}
+        />
+
+        <section className="products-page-grid">
+          {productsError ? (
+            <p className="products-page-empty">{productsError}</p>
+          ) : displayedProducts.length > 0 ? (
+            displayedProducts.map((product) => (
+              <ProductCard key={product._id ?? product.id ?? product.name} {...product} />
+            ))
           ) : (
             <p className="products-page-empty">
-              {loadStatus === "error"
-                ? "Failed to load products..."
-                : loadStatus === false
-                  ? "Loading products..."
-                  : "No products found in this category. Try browsing all products instead."}
+              {selectedCategory
+                ? "No products found in this category. Try browsing all products instead."
+                : "No products have been added yet."}
             </p>
           )}
         </section>

@@ -1,28 +1,59 @@
+"use client";
+
 import CategoryCard from "@/components/CategoryCard";
 import "@/components/categoryCard.css";
 import { mockProducts } from "@/data/products";
+import { mergeProducts } from "@/lib/products";
+import type { Product } from "@/types/product";
+import { useEffect, useMemo, useState } from "react";
 import "./categoriesPage.css";
 
 export default function CategoriesPage() {
-  const categories = Array.from(
-    mockProducts
-      .reduce((categoryMap, product) => {
-        const normalizedName = product.category.trim().toLocaleLowerCase();
-        const category = categoryMap.get(normalizedName);
+  const [products, setProducts] = useState<Product[]>(mockProducts);
 
-        if (category) {
-          category.productCount += 1;
-        } else {
-          categoryMap.set(normalizedName, {
-            name: product.category.trim(),
-            imageUrl: product.imageUrl,
-            productCount: 1,
-          });
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const loadProducts = async () => {
+      try {
+        const response = await fetch("/api/products", { signal: controller.signal });
+        if (!response.ok) return;
+        const apiProducts = (await response.json()) as Product[];
+        setProducts((currentProducts) => mergeProducts(currentProducts, apiProducts));
+      } catch (error) {
+        if ((error as Error).name !== "AbortError") {
+          console.error("Unable to load products for categories", error);
         }
+      }
+    };
 
-        return categoryMap;
-      }, new Map<string, { name: string; imageUrl: string; productCount: number }>())
-      .values(),
+    loadProducts();
+    return () => controller.abort();
+  }, []);
+
+  const categories = useMemo(
+    () =>
+      Array.from(
+        products
+          .reduce((categoryMap, product) => {
+            const normalizedName = product.category.trim().toLocaleLowerCase();
+            const category = categoryMap.get(normalizedName);
+
+            if (category) {
+              category.productCount += 1;
+            } else {
+              categoryMap.set(normalizedName, {
+                name: product.category.trim(),
+                imageUrl: product.imageUrl,
+                productCount: 1,
+              });
+            }
+
+            return categoryMap;
+          }, new Map<string, { name: string; imageUrl: string; productCount: number }>())
+          .values(),
+      ),
+    [products],
   );
 
   return (
