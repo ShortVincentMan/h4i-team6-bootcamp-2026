@@ -5,31 +5,33 @@ import "@/components/categoryCard.css";
 import { mockProducts } from "@/data/products";
 import { mergeProducts } from "@/lib/products";
 import type { Product } from "@/types/product";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import "./categoriesPage.css";
 
 export default function CategoriesPage() {
   const [products, setProducts] = useState<Product[]>(mockProducts);
+  const [loadStatus, setLoadStatus] = useState<"loading" | "ready" | "error">("loading");
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  const loadProducts = useCallback(async () => {
+    setLoadStatus("loading");
+    setLoadError(null);
+
+    try {
+      const response = await fetch("/api/products");
+      if (!response.ok) throw new Error("Unable to load categories");
+      const apiProducts = (await response.json()) as Product[];
+      setProducts((currentProducts) => mergeProducts(currentProducts, apiProducts));
+      setLoadStatus("ready");
+    } catch {
+      setLoadError("Categories could not be loaded. Please try again.");
+      setLoadStatus("error");
+    }
+  }, []);
 
   useEffect(() => {
-    const controller = new AbortController();
-
-    const loadProducts = async () => {
-      try {
-        const response = await fetch("/api/products", { signal: controller.signal });
-        if (!response.ok) return;
-        const apiProducts = (await response.json()) as Product[];
-        setProducts((currentProducts) => mergeProducts(currentProducts, apiProducts));
-      } catch (error) {
-        if ((error as Error).name !== "AbortError") {
-          console.error("Unable to load products for categories", error);
-        }
-      }
-    };
-
     loadProducts();
-    return () => controller.abort();
-  }, []);
+  }, [loadProducts]);
 
   const categories = useMemo(
     () =>
@@ -67,7 +69,20 @@ export default function CategoriesPage() {
           </p>
         </header>
 
-        {categories.length === 0 ? (
+        {loadStatus === "loading" ? (
+          <section className="categories-page-empty" aria-live="polite">
+            <h2>Loading categories</h2>
+            <p>Finding the latest beachside goods.</p>
+          </section>
+        ) : loadStatus === "error" ? (
+          <section className="categories-page-empty" role="alert">
+            <h2>Could not load categories</h2>
+            <p>{loadError}</p>
+            <button className="categories-page-retry" type="button" onClick={loadProducts}>
+              Try again
+            </button>
+          </section>
+        ) : categories.length === 0 ? (
           <section className="categories-page-empty" aria-live="polite">
             <h2>No categories yet</h2>
             <p>Check back soon for fresh beachside finds.</p>

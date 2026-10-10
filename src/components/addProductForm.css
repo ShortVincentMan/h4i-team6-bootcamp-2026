@@ -21,6 +21,7 @@
 
 .add-product {
   width: min(100%, 42rem);
+  box-sizing: border-box;
   max-height: calc(100vh - 2rem);
   overflow-y: auto;
   padding: 1.5rem;

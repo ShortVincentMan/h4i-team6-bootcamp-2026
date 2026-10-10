@@ -73,6 +73,23 @@
   margin: 0.6rem 0 0;
 }
 
+.categories-page-retry {
+  margin-top: 1rem;
+  border: 0;
+  border-radius: 4px;
+  padding: 0.65rem 1rem;
+  background: #1f3d5a;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+
+.categories-page-retry:hover,
+.categories-page-retry:focus-visible {
+  background: #2e5a7e;
+}
+
 @media (max-width: 640px) {
   .categories-page {
     padding: 1rem;
